@@ -28,7 +28,7 @@ class MyWidget(QMainWindow):
         super().__init__()
         uic.loadUi('skillmanager.ui', self)
         self.initUI()
-        self.loadOntology("/Users/kda/Documents/Интеллектуальные информационные системы/Модель компетенций/competencies2.rdf")
+        self.loadOntology("competencies2.rdf")
 
     def initUI(self):
         self.treeView.clicked.connect(self.view_doubleClicked)

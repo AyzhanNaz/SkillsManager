@@ -1,0 +1,2063 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://www.enu.kz/ontologies/curriculum"
+         xmlns="http://www.enu.kz/ontologies/curriculum#">
+
+<owl:Ontology rdf:about="http://www.enu.kz/ontologies/curriculum">
+  <rdfs:comment>Ontology of curriculum and learning outcomes</rdfs:comment>
+</owl:Ontology>
+
+<owl:ObjectProperty rdf:about="#Includes">
+  <owl:inverseOf rdf:resource="#isPartOf"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#Container"/>
+  <rdfs:range rdf:resource="#Item"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#isPartOf">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#Item"/>
+  <rdfs:range rdf:resource="#Container"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#followBy">
+  <rdfs:subPropertyOf rdf:resource="#goesAfter"/>
+  <owl:inverseOf rdf:resource="#precede"/>
+  <rdfs:domain rdf:resource="#TimeInterval"/>
+  <rdfs:range rdf:resource="#TimeInterval"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#goesAfter">
+  <owl:inverseOf rdf:resource="#goesBefore"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#TimeInterval"/>
+  <rdfs:range rdf:resource="#TimeInterval"/>
+  <owl:propertyChainAxiom>
+    <rdf:Description>
+      <rdf:first rdf:resource="#isPartOf"/>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first rdf:resource="#goesAfter"/>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </owl:propertyChainAxiom>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#precede">
+  <rdfs:subPropertyOf rdf:resource="#goesBefore"/>
+  <rdfs:domain rdf:resource="#TimeInterval"/>
+  <rdfs:range rdf:resource="#TimeInterval"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#goesBefore">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#TimeInterval"/>
+  <rdfs:range rdf:resource="#TimeInterval"/>
+  <owl:propertyChainAxiom>
+    <rdf:Description>
+      <rdf:first rdf:resource="#isPartOf"/>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first rdf:resource="#goesBefore"/>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </owl:propertyChainAxiom>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#providesStudy">
+  <owl:inverseOf rdf:resource="#studiedDuring"/>
+  <rdfs:domain rdf:resource="#Semester"/>
+  <rdfs:range rdf:resource="#Course"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#studiedDuring">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="#Semester"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#requiredBy">
+  <owl:inverseOf rdf:resource="#requires"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#Skill"/>
+  <rdfs:range rdf:resource="#Skill"/>
+  <owl:propertyChainAxiom>
+    <rdf:Description>
+      <rdf:first rdf:resource="#requiredBy"/>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first rdf:resource="#isPartOf"/>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </owl:propertyChainAxiom>
+  <rdfs:comment>The skill is necessary for another one</rdfs:comment>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#requires">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#Skill"/>
+  <rdfs:range rdf:resource="#Skill"/>
+  <owl:propertyChainAxiom>
+    <rdf:Description>
+      <rdf:first rdf:resource="#requires"/>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first rdf:resource="#Includes"/>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </owl:propertyChainAxiom>
+  <rdfs:comment>The skill requires (depends on) another one</rdfs:comment>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#train">
+  <owl:inverseOf rdf:resource="#trainedBy"/>
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="#Skill"/>
+  <owl:propertyChainAxiom>
+    <rdf:Description>
+      <rdf:first rdf:resource="#train"/>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first rdf:resource="#Includes"/>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </owl:propertyChainAxiom>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#trainedBy">
+  <rdfs:domain rdf:resource="#Skill"/>
+  <rdfs:range rdf:resource="#Course"/>
+  <owl:propertyChainAxiom>
+    <rdf:Description>
+      <rdf:first rdf:resource="#trainedBy"/>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first rdf:resource="#isPartOf"/>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </owl:propertyChainAxiom>
+</owl:ObjectProperty>
+
+<owl:DatatypeProperty rdf:about="#component">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#credits">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#cycle">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#exam">
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#name">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Course"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#type">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Skill"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:Class rdf:about="#Container"/>
+
+<owl:Class rdf:about="#Item"/>
+
+<owl:Class rdf:about="#TimeInterval">
+  <rdfs:subClassOf rdf:resource="#Container"/>
+  <rdfs:subClassOf rdf:resource="#Item"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Semester">
+  <rdfs:subClassOf rdf:resource="#Container"/>
+  <rdfs:subClassOf rdf:resource="#TimeInterval"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Course">
+  <rdfs:subClassOf rdf:resource="#Item"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Skill">
+  <rdfs:subClassOf rdf:resource="#Container"/>
+  <rdfs:subClassOf rdf:resource="#Item"/>
+</owl:Class>
+
+<owl:Class rdf:about="#AcademicYear">
+  <rdfs:subClassOf rdf:resource="#Container"/>
+  <rdfs:subClassOf rdf:resource="#TimeInterval"/>
+</owl:Class>
+
+<owl:Class rdf:about="#EducationalProgram">
+  <rdfs:subClassOf rdf:resource="#Container"/>
+</owl:Class>
+
+<owl:NamedIndividual rdf:about="#AcademicYear_1">
+  <rdf:type rdf:resource="#AcademicYear"/>
+  <precede rdf:resource="#AcademicYear_2"/>
+  <rdfs:label xml:lang="en">Academic Year 1</rdfs:label>
+  <rdfs:label xml:lang="ru">Курс 1</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#AcademicYear_2">
+  <rdf:type rdf:resource="#AcademicYear"/>
+  <precede rdf:resource="#AcademicYear_3"/>
+  <rdfs:label xml:lang="en">Academic Year 2</rdfs:label>
+  <rdfs:label xml:lang="ru">Курс 2</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#AcademicYear_3">
+  <rdf:type rdf:resource="#AcademicYear"/>
+  <precede rdf:resource="#AcademicYear_4"/>
+  <rdfs:label xml:lang="en">Academic Year 3</rdfs:label>
+  <rdfs:label xml:lang="ru">Курс 3</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#AcademicYear_4">
+  <rdf:type rdf:resource="#AcademicYear"/>
+  <rdfs:label xml:lang="en">Academic Year 4</rdfs:label>
+  <rdfs:label xml:lang="ru">Курс 4</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_0">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_1"/>
+  <precede rdf:resource="#Semester_1"/>
+  <rdfs:label xml:lang="en">Semester 0</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 0</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_1">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_2"/>
+  <isPartOf rdf:resource="#AcademicYear_1"/>
+  <precede rdf:resource="#Semester_2"/>
+  <rdfs:label xml:lang="en">Semester 1</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 1</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_2">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_3"/>
+  <isPartOf rdf:resource="#AcademicYear_1"/>
+  <precede rdf:resource="#Semester_3"/>
+  <rdfs:label xml:lang="en">Semester 2</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 2</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_3">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_4"/>
+  <isPartOf rdf:resource="#AcademicYear_2"/>
+  <precede rdf:resource="#Semester_4"/>
+  <rdfs:label xml:lang="en">Semester 3</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 3</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_4">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_5"/>
+  <isPartOf rdf:resource="#AcademicYear_2"/>
+  <precede rdf:resource="#Semester_5"/>
+  <rdfs:label xml:lang="en">Semester 4</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 4</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_5">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_6"/>
+  <isPartOf rdf:resource="#AcademicYear_3"/>
+  <precede rdf:resource="#Semester_6"/>
+  <rdfs:label xml:lang="en">Semester 5</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 5</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_6">
+  <rdf:type rdf:resource="#Semester"/>
+  <goesBefore rdf:resource="#Semester_7"/>
+  <isPartOf rdf:resource="#AcademicYear_3"/>
+  <precede rdf:resource="#Semester_7"/>
+  <rdfs:label xml:lang="en">Semester 6</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 6</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_7">
+  <rdf:type rdf:resource="#Semester"/>
+  <isPartOf rdf:resource="#AcademicYear_4"/>
+  <precede rdf:resource="#Semester_8"/>
+  <rdfs:label xml:lang="en">Semester 7</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 7</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Semester_8">
+  <rdf:type rdf:resource="#Semester"/>
+  <isPartOf rdf:resource="#AcademicYear_4"/>
+  <rdfs:label xml:lang="en">Semester 8</rdfs:label>
+  <rdfs:label xml:lang="ru">Семестр 8</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_0">
+  <rdf:type rdf:resource="#Skill"/>
+  <rdfs:label xml:lang="ru">Довузовские компетенции</rdfs:label>
+  <rdfs:label xml:lang="en">Pre-university competencies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_0.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_0"/>
+  <rdfs:label xml:lang="ru">Русский язык</rdfs:label>
+  <rdfs:label xml:lang="en">Russian language</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_0.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_0"/>
+  <rdfs:label xml:lang="ru">Профильная математика</rdfs:label>
+  <rdfs:label xml:lang="en">Profiled mathematics</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_0.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_0"/>
+  <rdfs:label xml:lang="ru">Информатика и ИКТ</rdfs:label>
+  <rdfs:label xml:lang="en">Informatics and ICT</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1">
+  <rdf:type rdf:resource="#Skill"/>
+  <rdfs:label xml:lang="ru">Универсальные компетенции</rdfs:label>
+  <rdfs:label xml:lang="en">Universal competencies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1"/>
+  <rdfs:label xml:lang="ru">Коммуникативные навыки</rdfs:label>
+  <rdfs:label xml:lang="en">Communication skills</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Устная коммуникация</rdfs:label>
+  <rdfs:label xml:lang="en">Oral communication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Письменная коммуникация</rdfs:label>
+  <rdfs:label xml:lang="en">Written communication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Визуальная коммуникация</rdfs:label>
+  <rdfs:label xml:lang="en">Visual communication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Межкультурная коммуникация</rdfs:label>
+  <rdfs:label xml:lang="en">Intercultural communication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1"/>
+  <requires rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Профессиональная этика</rdfs:label>
+  <rdfs:label xml:lang="en">Professional ethics</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.2"/>
+  <rdfs:label xml:lang="ru">Ответственность и надежность</rdfs:label>
+  <rdfs:label xml:lang="en">Responsibility and reliability</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.2"/>
+  <rdfs:label xml:lang="ru">Конфиденциальность данных</rdfs:label>
+  <rdfs:label xml:lang="en">Data confidentiality</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.2"/>
+  <rdfs:label xml:lang="ru">Соблюдение кодекса поведения</rdfs:label>
+  <rdfs:label xml:lang="en">Adherence to the code of conduct</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.2"/>
+  <rdfs:label xml:lang="ru">Этика в технологиях</rdfs:label>
+  <rdfs:label xml:lang="en">Ethics in technology</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1"/>
+  <requires rdf:resource="#Skill_1.2"/>
+  <rdfs:label xml:lang="ru">Креативность и инновации</rdfs:label>
+  <rdfs:label xml:lang="en">Creativity and innovation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.3"/>
+  <rdfs:label xml:lang="ru">Генерация идей</rdfs:label>
+  <rdfs:label xml:lang="en">Idea generation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.3"/>
+  <rdfs:label xml:lang="ru">Проектирование новых решений</rdfs:label>
+  <rdfs:label xml:lang="en">Designing new solutions</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.3"/>
+  <rdfs:label xml:lang="ru">Принятие рискованных решений</rdfs:label>
+  <rdfs:label xml:lang="en">Making risky decisions</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.3"/>
+  <rdfs:label xml:lang="ru">Адаптивность и гибкость</rdfs:label>
+  <rdfs:label xml:lang="en">Adaptability and flexibility</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1"/>
+  <requires rdf:resource="#Skill_1.3"/>
+  <rdfs:label xml:lang="ru">Критическое мышление</rdfs:label>
+  <rdfs:label xml:lang="en">Critical thinking</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.4.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.4"/>
+  <rdfs:label xml:lang="ru">Анализ и оценка информации</rdfs:label>
+  <rdfs:label xml:lang="en">Information analysis and assessment</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.4.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.4"/>
+  <rdfs:label xml:lang="ru">Логическое рассуждение</rdfs:label>
+  <rdfs:label xml:lang="en">Logical reasoning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.4.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.4"/>
+  <rdfs:label xml:lang="ru">Решение сложных проблем</rdfs:label>
+  <rdfs:label xml:lang="en">Problem-solving</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_1.4.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_1.4"/>
+  <rdfs:label xml:lang="ru">Принятие взвешенных решений</rdfs:label>
+  <rdfs:label xml:lang="en">Making informed decisions</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2">
+  <rdf:type rdf:resource="#Skill"/>
+  <rdfs:label xml:lang="ru">Общепрофессиональные компетенции</rdfs:label>
+  <rdfs:label xml:lang="en">General professional competencies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2"/>
+  <requires rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Аналитическое мышление</rdfs:label>
+  <rdfs:label xml:lang="en">Analytical thinking</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.1"/>
+  <rdfs:label xml:lang="ru">Логическое мышление</rdfs:label>
+  <rdfs:label xml:lang="en">Logical thinking</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.1"/>
+  <rdfs:label xml:lang="ru">Анализ данных</rdfs:label>
+  <rdfs:label xml:lang="en">Data analysis</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.1"/>
+  <rdfs:label xml:lang="ru">Структурирование информации</rdfs:label>
+  <rdfs:label xml:lang="en">Information structuring</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2"/>
+  <requires rdf:resource="#Skill_1.2"/>
+  <rdfs:label xml:lang="ru">Работа в команде</rdfs:label>
+  <rdfs:label xml:lang="en">Teamwork</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.2"/>
+  <requires rdf:resource="#Skill_2.1"/>
+  <rdfs:label xml:lang="ru">Коллаборативное решение задач</rdfs:label>
+  <rdfs:label xml:lang="en">Collaborative problem-solving</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.2"/>
+  <requires rdf:resource="#Skill_2.2.1"/>
+  <rdfs:label xml:lang="ru">Разделение обязанностей</rdfs:label>
+  <rdfs:label xml:lang="en">Task delegation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.2"/>
+  <requires rdf:resource="#Skill_2.2.2"/>
+  <rdfs:label xml:lang="ru">Эффективное общение в команде</rdfs:label>
+  <rdfs:label xml:lang="en">Effective team communication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.2"/>
+  <rdfs:label xml:lang="ru">Конструктивное разрешение конфликтов</rdfs:label>
+  <rdfs:label xml:lang="en">Constructive conflict resolution</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2"/>
+  <requires rdf:resource="#Skill_1.3"/>
+  <rdfs:label xml:lang="ru">Управление временем</rdfs:label>
+  <rdfs:label xml:lang="en">Time management</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.3"/>
+  <requires rdf:resource="#Skill_2.2.1"/>
+  <rdfs:label xml:lang="ru">Планирование задач</rdfs:label>
+  <rdfs:label xml:lang="en">Task planning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.3"/>
+  <requires rdf:resource="#Skill_2.2.2"/>
+  <rdfs:label xml:lang="ru">Приоритизация задач</rdfs:label>
+  <rdfs:label xml:lang="en">Task prioritization</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.3"/>
+  <requires rdf:resource="#Skill_2.2.3"/>
+  <rdfs:label xml:lang="ru">Соблюдение сроков</rdfs:label>
+  <rdfs:label xml:lang="en">Deadline adherence</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.3"/>
+  <rdfs:label xml:lang="ru">Управление рабочим временем</rdfs:label>
+  <rdfs:label xml:lang="en">Work time management</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2"/>
+  <requires rdf:resource="#Skill_2.1"/>
+  <requires rdf:resource="#Skill_1.4"/>
+  <rdfs:label xml:lang="ru">Презентационные навыки</rdfs:label>
+  <rdfs:label xml:lang="en">Presentation skills</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.4.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.4"/>
+  <rdfs:label xml:lang="ru">Создание информативных презентаций</rdfs:label>
+  <rdfs:label xml:lang="en">Creating informative presentations</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.4.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.4"/>
+  <rdfs:label xml:lang="ru">Публичное выступление</rdfs:label>
+  <rdfs:label xml:lang="en">Public speaking</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.4.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.4"/>
+  <rdfs:label xml:lang="ru">Визуализация данных и идей</rdfs:label>
+  <rdfs:label xml:lang="en">Data and idea visualization</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.4.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.4"/>
+  <rdfs:label xml:lang="ru">Адаптация презентации к аудитории</rdfs:label>
+  <rdfs:label xml:lang="en">Adapting presentations to the audience</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2"/>
+  <rdfs:label xml:lang="ru">Профессиональное обучение</rdfs:label>
+  <rdfs:label xml:lang="en">Professional learning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.5.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.5"/>
+  <requires rdf:resource="#Skill_2.1"/>
+  <rdfs:label xml:lang="ru">Постоянное самообразование</rdfs:label>
+  <rdfs:label xml:lang="en">Continuous self-improvement</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.5.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.5"/>
+  <requires rdf:resource="#Skill_2.2.1"/>
+  <rdfs:label xml:lang="ru">Адаптация к новым технологиям</rdfs:label>
+  <rdfs:label xml:lang="en">Adapting to new technologies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.5.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.5"/>
+  <rdfs:label xml:lang="ru">Изучение индустриальных стандартов</rdfs:label>
+  <rdfs:label xml:lang="en">Studying industry standards</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.5.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.5"/>
+  <rdfs:label xml:lang="ru">Эффективные методы обучения</rdfs:label>
+  <rdfs:label xml:lang="en">Effective learning methods</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.6">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2"/>
+  <rdfs:label xml:lang="ru">Межкультурная компетенция</rdfs:label>
+  <rdfs:label xml:lang="en">Cross-cultural competence</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.6.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.6"/>
+  <rdfs:label xml:lang="ru">Понимание культурных различий</rdfs:label>
+  <rdfs:label xml:lang="en">Understanding cultural differences</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.6.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.6"/>
+  <rdfs:label xml:lang="ru">Адаптация к межкультурному окружению</rdfs:label>
+  <rdfs:label xml:lang="en">Adapting to multicultural environments</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.6.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.6"/>
+  <rdfs:label xml:lang="ru">Межкультурное коммуницирование</rdfs:label>
+  <rdfs:label xml:lang="en">Cross-cultural communication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_2.6.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_2.6"/>
+  <rdfs:label xml:lang="ru">Уважение к культурным нормам</rdfs:label>
+  <rdfs:label xml:lang="en">Respect for cultural norms</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3">
+  <rdf:type rdf:resource="#Skill"/>
+  <rdfs:label xml:lang="ru">Профессиональные компетенции</rdfs:label>
+  <rdfs:label xml:lang="en">Professional competencies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <requires rdf:resource="#Skill_2.1"/>
+  <requires rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Разработка программного кода</rdfs:label>
+  <rdfs:label xml:lang="en">Software development</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">Выбор языков программирования</rdfs:label>
+  <rdfs:label xml:lang="en">Programming language selection</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.1"/>
+  <rdfs:label xml:lang="ru">Знание Python</rdfs:label>
+  <rdfs:label xml:lang="en">Python proficiency</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.1"/>
+  <requires rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Знание Java</rdfs:label>
+  <rdfs:label xml:lang="en">Java proficiency</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.1"/>
+  <rdfs:label xml:lang="ru">Знание C++</rdfs:label>
+  <rdfs:label xml:lang="en">C++ proficiency</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.1"/>
+  <rdfs:label xml:lang="ru">Знание JavaScript</rdfs:label>
+  <rdfs:label xml:lang="en">JavaScript proficiency</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">ООП и паттерны проектирования</rdfs:label>
+  <rdfs:label xml:lang="en">Object-Oriented Programming and Design Patterns</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Принципы ООП</rdfs:label>
+  <rdfs:label xml:lang="en">Principles of OOP</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Паттерн Singleton</rdfs:label>
+  <rdfs:label xml:lang="en">Singleton pattern</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Паттерн Factory Method</rdfs:label>
+  <rdfs:label xml:lang="en">Factory Method pattern</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Паттерн Observer</rdfs:label>
+  <rdfs:label xml:lang="en">Observer pattern</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Паттерн MVC</rdfs:label>
+  <rdfs:label xml:lang="en">MVC pattern</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.2.6">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Паттерн MVVM</rdfs:label>
+  <rdfs:label xml:lang="en">MVVM pattern</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">Структуры данных и алгоритмы</rdfs:label>
+  <rdfs:label xml:lang="en">Data Structures and Algorithms</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Сортировки</rdfs:label>
+  <rdfs:label xml:lang="en">Sorting algorithms</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Поиск</rdfs:label>
+  <rdfs:label xml:lang="en">Searching algorithms</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Сложность алгоритмов</rdfs:label>
+  <rdfs:label xml:lang="en">Algorithm complexity</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Графы и деревья</rdfs:label>
+  <rdfs:label xml:lang="en">Graphs and trees</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Хеш-таблицы</rdfs:label>
+  <rdfs:label xml:lang="en">Hash tables</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.3.6">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Динамическое программирование</rdfs:label>
+  <rdfs:label xml:lang="en">Dynamic programming</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">Тестирование и отладка</rdfs:label>
+  <rdfs:label xml:lang="en">Testing and debugging</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.4.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.4"/>
+  <rdfs:label xml:lang="ru">Unit-тестирование</rdfs:label>
+  <rdfs:label xml:lang="en">Unit testing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.4.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.4"/>
+  <rdfs:label xml:lang="ru">Интеграционное тестирование</rdfs:label>
+  <rdfs:label xml:lang="en">Integration testing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.4.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.4"/>
+  <rdfs:label xml:lang="ru">Отладка и профилирование</rdfs:label>
+  <rdfs:label xml:lang="en">Debugging and profiling</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.4.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.4"/>
+  <rdfs:label xml:lang="ru">Тестирование безопасности</rdfs:label>
+  <rdfs:label xml:lang="en">Security testing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.1.4.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.1.4"/>
+  <rdfs:label xml:lang="ru">Тестирование производительности</rdfs:label>
+  <rdfs:label xml:lang="en">Performance testing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <rdfs:label xml:lang="ru">Разработка веб-приложений</rdfs:label>
+  <rdfs:label xml:lang="en">Web Application Development</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2"/>
+  <requires rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">Фронтенд разработка</rdfs:label>
+  <rdfs:label xml:lang="en">Frontend Development</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.1"/>
+  <rdfs:label xml:lang="ru">HTML и CSS</rdfs:label>
+  <rdfs:label xml:lang="en">HTML and CSS</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.1"/>
+  <rdfs:label xml:lang="ru">JavaScript</rdfs:label>
+  <rdfs:label xml:lang="en">JavaScript</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.1"/>
+  <rdfs:label xml:lang="ru">Фреймворки для фронтенда</rdfs:label>
+  <rdfs:label xml:lang="en">Frontend Frameworks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.1"/>
+  <rdfs:label xml:lang="ru">Адаптивный дизайн</rdfs:label>
+  <rdfs:label xml:lang="en">Responsive Design</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.1.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.1"/>
+  <rdfs:label xml:lang="ru">Интерфейсы и пользовательский опыт</rdfs:label>
+  <rdfs:label xml:lang="en">User Interfaces and User Experience</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2"/>
+  <rdfs:label xml:lang="ru">Бекенд разработка</rdfs:label>
+  <rdfs:label xml:lang="en">Backend Development</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">Фреймворки для бекенда</rdfs:label>
+  <rdfs:label xml:lang="en">Backend Frameworks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">RESTful API</rdfs:label>
+  <rdfs:label xml:lang="en">RESTful API</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">Базы данных</rdfs:label>
+  <rdfs:label xml:lang="en">Databases</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">ORM</rdfs:label>
+  <rdfs:label xml:lang="en">Object-Relational Mapping (ORM)</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">Миграции данных</rdfs:label>
+  <rdfs:label xml:lang="en">Data Migrations</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.2.2.6">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">NoSQL базы данных</rdfs:label>
+  <rdfs:label xml:lang="en">NoSQL Databases</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <rdfs:label xml:lang="ru">Информационная безопасность</rdfs:label>
+  <rdfs:label xml:lang="en">Information Security</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3"/>
+  <rdfs:label xml:lang="ru">Основы криптографии</rdfs:label>
+  <rdfs:label xml:lang="en">Cryptography Basics</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.1"/>
+  <rdfs:label xml:lang="ru">Симметричное шифрование</rdfs:label>
+  <rdfs:label xml:lang="en">Symmetric Encryption</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.1"/>
+  <rdfs:label xml:lang="ru">Асимметричное шифрование</rdfs:label>
+  <rdfs:label xml:lang="en">Asymmetric Encryption</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.1"/>
+  <rdfs:label xml:lang="ru">Цифровые подписи</rdfs:label>
+  <rdfs:label xml:lang="en">Digital Signatures</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3"/>
+  <requires rdf:resource="#Skill_2.3.2"/>
+  <requires rdf:resource="#Skill_3.2.2"/>
+  <rdfs:label xml:lang="ru">Защита данных и аутентификация</rdfs:label>
+  <rdfs:label xml:lang="en">Data Protection and Authentication</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.2"/>
+  <rdfs:label xml:lang="ru">Хэширование и соли</rdfs:label>
+  <rdfs:label xml:lang="en">Hashing and Salting</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.2"/>
+  <rdfs:label xml:lang="ru">JWT токены</rdfs:label>
+  <rdfs:label xml:lang="en">JWT Tokens</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.2"/>
+  <rdfs:label xml:lang="ru">OAuth и OpenID Connect</rdfs:label>
+  <rdfs:label xml:lang="en">OAuth and OpenID Connect</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3"/>
+  <rdfs:label xml:lang="ru">Сетевая безопасность</rdfs:label>
+  <rdfs:label xml:lang="en">Network Security</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.3"/>
+  <rdfs:label xml:lang="ru">Firewall и IDS/IPS</rdfs:label>
+  <rdfs:label xml:lang="en">Firewall and IDS/IPS</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.3"/>
+  <rdfs:label xml:lang="ru">VPN и шифрование трафика</rdfs:label>
+  <rdfs:label xml:lang="en">VPN and Traffic Encryption</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.3.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.3.3"/>
+  <rdfs:label xml:lang="ru">DDoS защита</rdfs:label>
+  <rdfs:label xml:lang="en">DDoS Protection</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <requires rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">Архитектура информационных систем</rdfs:label>
+  <rdfs:label xml:lang="en">Information Systems Architecture</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4"/>
+  <rdfs:label xml:lang="ru">Монолитная архитектура</rdfs:label>
+  <rdfs:label xml:lang="en">Monolithic Architecture</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.1"/>
+  <rdfs:label xml:lang="ru">Монолитное приложение</rdfs:label>
+  <rdfs:label xml:lang="en">Monolithic Application</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.1"/>
+  <rdfs:label xml:lang="ru">Монолитное развертывание</rdfs:label>
+  <rdfs:label xml:lang="en">Monolithic Deployment</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.1"/>
+  <rdfs:label xml:lang="ru">Монолитное масштабирование</rdfs:label>
+  <rdfs:label xml:lang="en">Monolithic Scaling</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.1"/>
+  <rdfs:label xml:lang="ru">Монолитный мониторинг</rdfs:label>
+  <rdfs:label xml:lang="en">Monolithic Monitoring</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4"/>
+  <rdfs:label xml:lang="ru">Микросервисная архитектура</rdfs:label>
+  <rdfs:label xml:lang="en">Microservices Architecture</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.2"/>
+  <rdfs:label xml:lang="ru">Микросервисное развертывание</rdfs:label>
+  <rdfs:label xml:lang="en">Microservices Deployment</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.2"/>
+  <rdfs:label xml:lang="ru">Микросервисный мониторинг</rdfs:label>
+  <rdfs:label xml:lang="en">Microservices Monitoring</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.2"/>
+  <rdfs:label xml:lang="ru">Микросервисное масштабирование</rdfs:label>
+  <rdfs:label xml:lang="en">Microservices Scaling</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.2"/>
+  <rdfs:label xml:lang="ru">Микросервисные шаблоны</rdfs:label>
+  <rdfs:label xml:lang="en">Microservices Patterns</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4"/>
+  <rdfs:label xml:lang="ru">Событийно-ориентированная архитектура</rdfs:label>
+  <rdfs:label xml:lang="en">Event-Driven Architecture</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.3"/>
+  <rdfs:label xml:lang="ru">Паттерны обработки событий</rdfs:label>
+  <rdfs:label xml:lang="en">Event Processing Patterns</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.3"/>
+  <rdfs:label xml:lang="ru">Системы потоковой обработки</rdfs:label>
+  <rdfs:label xml:lang="en">Stream Processing Systems</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.3"/>
+  <rdfs:label xml:lang="ru">Событийная маршрутизация</rdfs:label>
+  <rdfs:label xml:lang="en">Event Routing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.4.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.4.3"/>
+  <rdfs:label xml:lang="ru">Компенсирующие транзакции</rdfs:label>
+  <rdfs:label xml:lang="en">Compensating Transactions</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <rdfs:label xml:lang="ru">Управление проектами</rdfs:label>
+  <rdfs:label xml:lang="en">Project Management</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5"/>
+  <rdfs:label xml:lang="ru">Планирование и оценка</rdfs:label>
+  <rdfs:label xml:lang="en">Planning and Estimation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.1"/>
+  <rdfs:label xml:lang="ru">Составление плана проекта</rdfs:label>
+  <rdfs:label xml:lang="en">Project Planning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.1"/>
+  <rdfs:label xml:lang="ru">Оценка рисков и ресурсов</rdfs:label>
+  <rdfs:label xml:lang="en">Risk and Resource Assessment</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.1"/>
+  <rdfs:label xml:lang="ru">Графики Гантта и диаграммы Перта</rdfs:label>
+  <rdfs:label xml:lang="en">Gantt Charts and Pert Diagrams</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.1"/>
+  <rdfs:label xml:lang="ru">Оценка сложности задач</rdfs:label>
+  <rdfs:label xml:lang="en">Task Complexity Assessment</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5"/>
+  <requires rdf:resource="#Skill_2.5.2"/>
+  <rdfs:label xml:lang="ru">Управление рисками</rdfs:label>
+  <rdfs:label xml:lang="en">Risk Management</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.2"/>
+  <rdfs:label xml:lang="ru">Идентификация рисков</rdfs:label>
+  <rdfs:label xml:lang="en">Risk Identification</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.2"/>
+  <rdfs:label xml:lang="ru">Анализ и приоритизация рисков</rdfs:label>
+  <rdfs:label xml:lang="en">Risk Analysis and Prioritization</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.2"/>
+  <rdfs:label xml:lang="ru">Планирование мер по снижению рисков</rdfs:label>
+  <rdfs:label xml:lang="en">Risk Mitigation Planning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.2"/>
+  <rdfs:label xml:lang="ru">Мониторинг и контроль рисков</rdfs:label>
+  <rdfs:label xml:lang="en">Risk Monitoring and Control</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5"/>
+  <requires rdf:resource="#Skill_3.2.2"/>
+  <requires rdf:resource="#Skill_2.5.3"/>
+  <rdfs:label xml:lang="ru">Методологии разработки</rdfs:label>
+  <rdfs:label xml:lang="en">Development Methodologies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.3"/>
+  <rdfs:label xml:lang="ru">Agile методологии</rdfs:label>
+  <rdfs:label xml:lang="en">Agile Methodologies</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.3"/>
+  <rdfs:label xml:lang="ru">Waterfall методология</rdfs:label>
+  <rdfs:label xml:lang="en">Waterfall Methodology</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.3"/>
+  <rdfs:label xml:lang="ru">Scrum фреймворк</rdfs:label>
+  <rdfs:label xml:lang="en">Scrum Framework</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.5.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.5.3"/>
+  <rdfs:label xml:lang="ru">Kanban методология</rdfs:label>
+  <rdfs:label xml:lang="en">Kanban Methodology</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <rdfs:label xml:lang="ru">Искусственный интеллект и машинное обучение</rdfs:label>
+  <rdfs:label xml:lang="en">Artificial Intelligence and Machine Learning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6"/>
+  <requires rdf:resource="#Skill_3.1"/>
+  <rdfs:label xml:lang="ru">Основы машинного обучения</rdfs:label>
+  <rdfs:label xml:lang="en">Fundamentals of Machine Learning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Типы задач машинного обучения</rdfs:label>
+  <rdfs:label xml:lang="en">Types of Machine Learning Tasks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Обучение с учителем и без учителя</rdfs:label>
+  <rdfs:label xml:lang="en">Supervised and Unsupervised Learning</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Кросс-валидация и выбор модели</rdfs:label>
+  <rdfs:label xml:lang="en">Cross-Validation and Model Selection</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Оценка и интерпретация моделей</rdfs:label>
+  <rdfs:label xml:lang="en">Model Evaluation and Interpretation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6"/>
+  <rdfs:label xml:lang="ru">Глубокое обучение и нейронные сети</rdfs:label>
+  <rdfs:label xml:lang="en">Deep Learning and Neural Networks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.2"/>
+  <rdfs:label xml:lang="ru">Искусственные нейронные сети</rdfs:label>
+  <rdfs:label xml:lang="en">Artificial Neural Networks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.2"/>
+  <rdfs:label xml:lang="ru">Сверточные нейронные сети</rdfs:label>
+  <rdfs:label xml:lang="en">Convolutional Neural Networks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.2"/>
+  <rdfs:label xml:lang="ru">Рекуррентные нейронные сети</rdfs:label>
+  <rdfs:label xml:lang="en">Recurrent Neural Networks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.2"/>
+  <rdfs:label xml:lang="ru">Генеративные нейронные сети</rdfs:label>
+  <rdfs:label xml:lang="en">Generative Neural Networks</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6"/>
+  <requires rdf:resource="#Skill_3.2.2"/>
+  <requires rdf:resource="#Skill_3.5.3"/>
+  <rdfs:label xml:lang="ru">Обработка естественного языка</rdfs:label>
+  <rdfs:label xml:lang="en">Natural Language Processing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.3"/>
+  <rdfs:label xml:lang="ru">Токенизация и стемминг</rdfs:label>
+  <rdfs:label xml:lang="en">Tokenization and Stemming</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.3"/>
+  <rdfs:label xml:lang="ru">Извлечение информации</rdfs:label>
+  <rdfs:label xml:lang="en">Information Extraction</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.3"/>
+  <rdfs:label xml:lang="ru">Сентимент анализ</rdfs:label>
+  <rdfs:label xml:lang="en">Sentiment Analysis</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.6.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.6.3"/>
+  <rdfs:label xml:lang="ru">Машинный перевод</rdfs:label>
+  <rdfs:label xml:lang="en">Machine Translation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3"/>
+  <rdfs:label xml:lang="ru">Развертывание и обслуживание</rdfs:label>
+  <rdfs:label xml:lang="en">Deployment and Maintenance</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7"/>
+  <rdfs:label xml:lang="ru">DevOps практики</rdfs:label>
+  <rdfs:label xml:lang="en">DevOps Practices</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.1.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.1"/>
+  <requires rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Концепция DevOps</rdfs:label>
+  <rdfs:label xml:lang="en">DevOps Concept</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.1.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.1"/>
+  <requires rdf:resource="#Skill_3.6.2"/>
+  <rdfs:label xml:lang="ru">Инфраструктура как код</rdfs:label>
+  <rdfs:label xml:lang="en">Infrastructure as Code</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.1.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.1"/>
+  <rdfs:label xml:lang="ru">Непрерывная интеграция и доставка</rdfs:label>
+  <rdfs:label xml:lang="en">Continuous Integration and Delivery</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.1.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.1"/>
+  <rdfs:label xml:lang="ru">Автоматизация развертывания</rdfs:label>
+  <rdfs:label xml:lang="en">Deployment Automation</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7"/>
+  <rdfs:label xml:lang="ru">Контейнеризация и оркестрация</rdfs:label>
+  <rdfs:label xml:lang="en">Containerization and Orchestration</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.2.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.2"/>
+  <requires rdf:resource="#Skill_3.7.1.1"/>
+  <rdfs:label xml:lang="ru">Docker контейнеры</rdfs:label>
+  <rdfs:label xml:lang="en">Docker Containers</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.2.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.2"/>
+  <requires rdf:resource="#Skill_3.7.1.2"/>
+  <rdfs:label xml:lang="ru">Kubernetes оркестратор</rdfs:label>
+  <rdfs:label xml:lang="en">Kubernetes Orchestrator</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.2.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.2"/>
+  <requires rdf:resource="#Skill_3.7.1.3"/>
+  <rdfs:label xml:lang="ru">Масштабирование и балансировка нагрузки</rdfs:label>
+  <rdfs:label xml:lang="en">Scaling and Load Balancing</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.2.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.2"/>
+  <requires rdf:resource="#Skill_3.7.1.4"/>
+  <rdfs:label xml:lang="ru">Мониторинг и журналирование</rdfs:label>
+  <rdfs:label xml:lang="en">Monitoring and Logging</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7"/>
+  <rdfs:label xml:lang="ru">Облачные платформы</rdfs:label>
+  <rdfs:label xml:lang="en">Cloud Platforms</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.3.1">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.3"/>
+  <requires rdf:resource="#Skill_3.7.2.2"/>
+  <rdfs:label xml:lang="ru">Amazon Web Services (AWS)</rdfs:label>
+  <rdfs:label xml:lang="en">Amazon Web Services (AWS)</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.3.2">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.3"/>
+  <requires rdf:resource="#Skill_3.7.2.3"/>
+  <rdfs:label xml:lang="ru">Microsoft Azure</rdfs:label>
+  <rdfs:label xml:lang="en">Microsoft Azure</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.3.3">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.3"/>
+  <requires rdf:resource="#Skill_3.7.2.4"/>
+  <rdfs:label xml:lang="ru">Google Cloud Platform (GCP)</rdfs:label>
+  <rdfs:label xml:lang="en">Google Cloud Platform (GCP)</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Skill_3.7.3.4">
+  <rdf:type rdf:resource="#Skill"/>
+  <isPartOf rdf:resource="#Skill_3.7.3"/>
+  <rdfs:label xml:lang="ru">Serverless архитектура</rdfs:label>
+  <rdfs:label xml:lang="en">Serverless Architecture</rdfs:label>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_00">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_0"/>
+  <train rdf:resource="#Skill_0"/>
+  <train rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Подготовительный курс</rdfs:label>
+  <rdfs:label xml:lang="en">Preparatory Course</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_01">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_3.1.1.1"/>
+  <train rdf:resource="#Skill_3.1.1.3"/>
+  <rdfs:label xml:lang="ru">Введение в программирование</rdfs:label>
+  <rdfs:label xml:lang="en">Introduction to Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_02">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Основы алгоритмизации</rdfs:label>
+  <rdfs:label xml:lang="en">Fundamentals of Algorithmization</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_03">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_2.1"/>
+  <rdfs:label xml:lang="ru">Дискретная математика</rdfs:label>
+  <rdfs:label xml:lang="en">Discrete Mathematics</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_04">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_2"/>
+  <train rdf:resource="#Skill_3.1.1.1"/>
+  <rdfs:label xml:lang="ru">Основы программирования на Python</rdfs:label>
+  <rdfs:label xml:lang="en">Fundamentals of Python Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_05">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_2"/>
+  <train rdf:resource="#Skill_3.1.3"/>
+  <rdfs:label xml:lang="ru">Структуры данных и алгоритмы</rdfs:label>
+  <rdfs:label xml:lang="en">Data Structures and Algorithms</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_06">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_2"/>
+  <train rdf:resource="#Skill_3.4"/>
+  <rdfs:label xml:lang="ru">Архитектура компьютерных систем</rdfs:label>
+  <rdfs:label xml:lang="en">Computer Systems Architecture</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_07">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_3"/>
+  <train rdf:resource="#Skill_3.7.3"/>
+  <rdfs:label xml:lang="ru">Операционные системы</rdfs:label>
+  <rdfs:label xml:lang="en">Operating Systems</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_08">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_3"/>
+  <train rdf:resource="#Skill_3.2.2.6"/>
+  <train rdf:resource="#Skill_3.2.2.5"/>
+  <train rdf:resource="#Skill_3.2.2.3"/>
+  <train rdf:resource="#Skill_3.2.2.4"/>
+  <rdfs:label xml:lang="ru">Базы данных и SQL</rdfs:label>
+  <rdfs:label xml:lang="en">Databases and SQL</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_09">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_3"/>
+  <train rdf:resource="#Skill_3.2.1.2"/>
+  <train rdf:resource="#Skill_3.2.1.1"/>
+  <rdfs:label xml:lang="ru">Веб-разработка и HTML/CSS</rdfs:label>
+  <rdfs:label xml:lang="en">Web Development and HTML/CSS</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_10">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_4"/>
+  <train rdf:resource="#Skill_3.1.1.2"/>
+  <rdfs:label xml:lang="ru">Программирование на Java</rdfs:label>
+  <rdfs:label xml:lang="en">Java Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_11">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_4"/>
+  <train rdf:resource="#Skill_3.1.3.3"/>
+  <rdfs:label xml:lang="ru">Математическая логика и теория алгоритмов</rdfs:label>
+  <rdfs:label xml:lang="en">Mathematical Logic and Algorithm Theory</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_12">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_4"/>
+  <train rdf:resource="#Skill_3.4.1"/>
+  <rdfs:label xml:lang="ru">Проектирование информационных систем</rdfs:label>
+  <rdfs:label xml:lang="en">Information Systems Design</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_13">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_5"/>
+  <train rdf:resource="#Skill_3.1.1.2"/>
+  <rdfs:label xml:lang="ru">Мобильная разработка</rdfs:label>
+  <rdfs:label xml:lang="en">Mobile Development</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_14">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_5"/>
+  <train rdf:resource="#Skill_3.3.3.1"/>
+  <train rdf:resource="#Skill_3.3.3.3"/>
+  <train rdf:resource="#Skill_3.3.3.2"/>
+  <rdfs:label xml:lang="ru">Сети и протоколы</rdfs:label>
+  <rdfs:label xml:lang="en">Networks and Protocols</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_15">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_5"/>
+  <train rdf:resource="#Skill_3.1.4.2"/>
+  <train rdf:resource="#Skill_3.1.4.1"/>
+  <rdfs:label xml:lang="ru">Тестирование программного обеспечения</rdfs:label>
+  <rdfs:label xml:lang="en">Software Testing</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_16">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_6"/>
+  <train rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Машинное обучение и искусственный интеллект</rdfs:label>
+  <rdfs:label xml:lang="en">Machine Learning and Artificial Intelligence</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_17">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_6"/>
+  <train rdf:resource="#Skill_3.3.2"/>
+  <rdfs:label xml:lang="ru">Безопасность информационных систем</rdfs:label>
+  <rdfs:label xml:lang="en">Information Systems Security</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_18">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_6"/>
+  <train rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Проектная работа по программированию</rdfs:label>
+  <rdfs:label xml:lang="en">Programming Project Work</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_19">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_7"/>
+  <train rdf:resource="#Skill_3.7.3"/>
+  <rdfs:label xml:lang="ru">Интернет вещей и умный город</rdfs:label>
+  <rdfs:label xml:lang="en">Internet of Things and Smart Cities</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_20">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_7"/>
+  <train rdf:resource="#Skill_3.1.3.4"/>
+  <rdfs:label xml:lang="ru">Компьютерная графика и визуализация</rdfs:label>
+  <rdfs:label xml:lang="en">Computer Graphics and Visualization</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_21">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_7"/>
+  <train rdf:resource="#Skill_3.5.1"/>
+  <train rdf:resource="#Skill_3.5.2"/>
+  <train rdf:resource="#Skill_3.5.3"/>
+  <rdfs:label xml:lang="ru">Управление IT-проектами</rdfs:label>
+  <rdfs:label xml:lang="en">IT Project Management</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_22">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_8"/>
+  <train rdf:resource="#Skill_3.6.1"/>
+  <rdfs:label xml:lang="ru">Анализ данных</rdfs:label>
+  <rdfs:label xml:lang="en">Data Analysis</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_23">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_8"/>
+  <train rdf:resource="#Skill_2.6"/>
+  <rdfs:label xml:lang="ru">Этика и профессиональные стандарты</rdfs:label>
+  <rdfs:label xml:lang="en">Ethics and Professional Standards</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_24">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_8"/>
+  <train rdf:resource="#Skill_3.1.3.1"/>
+  <rdfs:label xml:lang="ru">Теория вероятностей и математическая статистика</rdfs:label>
+  <rdfs:label xml:lang="en">Probability Theory and Mathematical Statistics</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_25">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_3.1.3.4"/>
+  <rdfs:label xml:lang="ru">Функциональное программирование</rdfs:label>
+  <rdfs:label xml:lang="en">Functional Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_26">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_2"/>
+  <train rdf:resource="#Skill_3.4.2"/>
+  <rdfs:label xml:lang="ru">Распределенные системы</rdfs:label>
+  <rdfs:label xml:lang="en">Distributed Systems</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_27">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_3"/>
+  <train rdf:resource="#Skill_3.2.1"/>
+  <rdfs:label xml:lang="ru">Разработка интерфейсов</rdfs:label>
+  <rdfs:label xml:lang="en">Interface Development</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_28">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_4"/>
+  <train rdf:resource="#Skill_3.2.2.3"/>
+  <train rdf:resource="#Skill_3.2.2.4"/>
+  <rdfs:label xml:lang="ru">Администрирование баз данных</rdfs:label>
+  <rdfs:label xml:lang="en">Database Administration</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_29">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_5"/>
+  <train rdf:resource="#Skill_3.7.2"/>
+  <rdfs:label xml:lang="ru">Технологии виртуализации</rdfs:label>
+  <rdfs:label xml:lang="en">Virtualization Technologies</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_30">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_6"/>
+  <train rdf:resource="#Skill_3.4.3"/>
+  <rdfs:label xml:lang="ru">Системное программирование</rdfs:label>
+  <rdfs:label xml:lang="en">Systems Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_31">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_7"/>
+  <train rdf:resource="#Skill_2.6"/>
+  <rdfs:label xml:lang="ru">Английский язык для программистов</rdfs:label>
+  <rdfs:label xml:lang="en">English for Programmers</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_32">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_8"/>
+  <train rdf:resource="#Skill_3.1.1.3"/>
+  <rdfs:label xml:lang="ru">Программирование на C++</rdfs:label>
+  <rdfs:label xml:lang="en">C++ Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_33">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_3.3.3.2"/>
+  <rdfs:label xml:lang="ru">Компьютерные системы и сети</rdfs:label>
+  <rdfs:label xml:lang="en">Computer Systems and Networks</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_34">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_2"/>
+  <train rdf:resource="#Skill_3.5.1"/>
+  <rdfs:label xml:lang="ru">Моделирование и анализ систем</rdfs:label>
+  <rdfs:label xml:lang="en">Modeling and Analysis of Systems</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_37">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_6"/>
+  <train rdf:resource="#Skill_2.6.1"/>
+  <rdfs:label xml:lang="ru">Информационные технологии в бизнесе</rdfs:label>
+  <rdfs:label xml:lang="en">Information Technology in Business</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_38">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_7"/>
+  <train rdf:resource="#Skill_2.6.2"/>
+  <rdfs:label xml:lang="ru">Разработка мобильных приложений</rdfs:label>
+  <rdfs:label xml:lang="en">Mobile App Development</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_39">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_3.3.1"/>
+  <train rdf:resource="#Skill_2.6.3"/>
+  <train rdf:resource="#Skill_3.1.1"/>
+  <train rdf:resource="#Skill_3.3.3.2"/>
+  <rdfs:label xml:lang="ru">Основы криптографии</rdfs:label>
+  <rdfs:label xml:lang="en">Fundamentals of Cryptography</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_40">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_3"/>
+  <train rdf:resource="#Skill_2.5"/>
+  <train rdf:resource="#Skill_3.4.2"/>
+  <rdfs:label xml:lang="ru">Производственная практика</rdfs:label>
+  <rdfs:label xml:lang="en">Industrial Practice</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_41">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_6"/>
+  <train rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Сетевая безопасность</rdfs:label>
+  <rdfs:label xml:lang="en">Network Security</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_42">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_7"/>
+  <train rdf:resource="#Skill_3.1.2"/>
+  <rdfs:label xml:lang="ru">Программирование веб-сервисов</rdfs:label>
+  <rdfs:label xml:lang="en">Web Service Programming</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Экзамен</exam>
+  <exam xml:lang="en">Exam</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_43">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_1"/>
+  <train rdf:resource="#Skill_1.1"/>
+  <rdfs:label xml:lang="ru">Физическая культура</rdfs:label>
+  <rdfs:label xml:lang="en">Physical Education</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Course_44">
+  <rdf:type rdf:resource="#Course"/>
+  <studiedDuring rdf:resource="#Semester_2"/>
+  <train rdf:resource="#Skill_2.3.1"/>
+  <rdfs:label xml:lang="ru">Экономика и управление проектами</rdfs:label>
+  <rdfs:label xml:lang="en">Economics and Project Management</rdfs:label>
+  <credits rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</credits>
+  <exam xml:lang="ru">Зачет</exam>
+  <exam xml:lang="en">Test</exam>
+</owl:NamedIndividual>
+
+
+</rdf:RDF>
